@@ -1,0 +1,60 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 739f3c9177b13d1c15aa060046cfb023
+      size: 23872
+    - path: src/preprocess.py
+      hash: md5
+      md5: 6d89c3d82a797fcb7eea4b7df1aa466e
+      size: 480
+    params:
+      params.yaml:
+        preprocess.input: data/raw/data.csv
+        preprocess.output: data/processed/data.csv
+    outs:
+    - path: data/processed/data.csv
+      hash: md5
+      md5: 40c8685fe8743b4b196f3dd1a6fe50c6
+      size: 23192
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 739f3c9177b13d1c15aa060046cfb023
+      size: 23872
+    - path: src/train.py
+      hash: md5
+      md5: 529daaeb37444a9e36aa3ad9987a830d
+      size: 3518
+    params:
+      params.yaml:
+        train.data: data/raw/data.csv
+        train.max_depth: 5
+        train.model: models/model.skops
+        train.n_estimators: 100
+        train.random_state: 42
+    outs:
+    - path: models/model.skops
+      hash: md5
+      md5: 5fbea7e246caa33cedabe964b8b78bb9
+      size: 2797971
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 739f3c9177b13d1c15aa060046cfb023
+      size: 23872
+    - path: models/model.skops
+      hash: md5
+      md5: 5fbea7e246caa33cedabe964b8b78bb9
+      size: 2797971
+    - path: src/evaluate.py
+      hash: md5
+      md5: d3951f8bd3e54bf96f614de99fc9d8ec
+      size: 1245
