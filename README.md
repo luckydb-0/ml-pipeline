@@ -1,5 +1,5 @@
 # ml-pipeline
-Repository for an end-to-end Machine Learning pipeline using DVC, MLFlow and Dagshub. Based on the MLOps Bootcamp course on Udemy.
+End-to-end Machine Learning pipeline using DVC, MLFlow and [DagsHub](https://dagshub.com/luckydb-0/ml-pipeline). Based on the MLOps Bootcamp course on Udemy.
 
 ## Project Description
 This project demonstrates how to build an end-to-end machine learning pipeline using **DVC** (Data Version Control) for data and model versioning, and **MLFlow** for experiment tracking, while tracking everything with Git(Hub) and **DagsHub**. The pipeline focuses on training a Random Forest Classifier on the Pima Indians Diabetes Dataset, with clear stages for data preprocessing, model training, and evaluation.
@@ -40,11 +40,11 @@ The evaluation metrics are logged to MLflow for tracking.
 
 **Collaboration**: DVC and MLflow enable smooth collaboration in a team environment, where different users can work on the same project and track changes seamlessly.
 
-**Use Cases**:
+#### **Use Cases**
 - Data Science Teams: Teams can use this project setup to track datasets, models, and experiments in a reproducible and organized manner.
 - Machine Learning Research: Researchers can quickly iterate over different experiments, track performance metrics, and manage data versions effectively.
 
-Technology Stack:
+#### **Technology Stack**
 - Python: The core programming language for data processing, model training, and evaluation.
 - DVC: For version control of data, models, and pipeline stages.
 - MLFlow: For logging and tracking experiments, metrics, and model artifacts.
@@ -52,22 +52,31 @@ Technology Stack:
 
 This project demonstrates how to manage the lifecycle of a machine learning project, ensuring that data, code, models, and experiments are all tracked, versioned, and reproducible.
 
-### For Adding Stages
+### DVC Stages
 
+DVC commands used to create the stages present in `dvc.yaml`:
+
+preprocess:
+```
 dvc stage add -n preprocess \
     -p preprocess.input,preprocess.output \
     -d src/preprocess.py -d data/raw/data.csv \
     -o data/processed/data.csv \
     python src/preprocess.py
+```
 
-
+train:
+```
 dvc stage add -n train \
     -p train.data,train.model,train.random_state,train.n_estimators,train.max_depth \
     -d src/train.py -d data/raw/data.csv \
     -o models/model.pkl \
     python src/train.py
+```
 
-
+evaluate:
+```
 dvc stage add -n evaluate \
     -d src/evaluate.py -d models/model.pkl -d data/raw/data.csv \
     python src/evaluate.py
+```
